@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Happy Holi 🎉</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(45deg,#ff0080,#ff8c00,#40e0d0,#ff0080);
+            background-size: 400% 400%;
+            animation: bg 8s infinite alternate;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        @keyframes bg {
+            0% {background-position:0% 50%;}
+            100% {background-position:100% 50%;}
+        }
+
+        h1 {
+            margin-top: 60px;
+            font-size: 35px;
+            text-shadow: 2px 2px 5px black;
+        }
+
+        .box {
+            margin-top: 30px;
+        }
+
+        input {
+            padding: 12px;
+            width: 70%;
+            border-radius: 25px;
+            border: none;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        button {
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: none;
+            font-size: 16px;
+            margin-top: 15px;
+            cursor: pointer;
+            background: yellow;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: orange;
+            transform: scale(1.1);
+        }
+
+        .wish {
+            margin-top: 30px;
+            font-size: 22px;
+            text-shadow: 2px 2px 5px black;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🌈 Happy Holi 2026 🎉</h1>
+
+<div class="wish" id="wishText"></div>
+
+<div class="box">
+    <input type="text" id="nameInput" placeholder="Enter Your Name">
+    <br>
+    <button onclick="generateLink()">Create Your Wish Link 🔗</button>
+</div>
+
+<br>
+<button onclick="shareWhatsApp()">Share on WhatsApp 📲</button>
+
+<canvas id="confetti"></canvas>
+
+<audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    // Get name from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = urlParams.get('name');
+
+    if(name){
+        document.getElementById("wishText").innerHTML =
+        "🎊 " + name + " wishes you a very Happy Holi! 🎊";
+    }
+
+    function generateLink(){
+        const userName = document.getElementById("nameInput").value;
+        if(userName !== ""){
+            const newLink = window.location.origin + window.location.pathname + "?name=" + userName;
+            alert("Your Link: " + newLink);
+        }
+    }
+
+    function shareWhatsApp(){
+        const text = encodeURIComponent("Check this Holi Wish 🎉 " + window.location.href);
+        window.open("https://wa.me/?text=" + text);
+    }
+
+    // Confetti Effect
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let pieces = [];
+    for(let i=0;i<150;i++){
+        pieces.push({
+            x: Math.random()*canvas.width,
+            y: Math.random()*canvas.height,
+            size: Math.random()*8+2,
+            speed: Math.random()*3+1
+        });
+    }
+
+    function drawConfetti(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle = "white";
+        pieces.forEach(p=>{
+            ctx.beginPath();
+            ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+            ctx.fill();
+            p.y += p.speed;
+            if(p.y > canvas.height) p.y = 0;
+        });
+        requestAnimationFrame(drawConfetti);
+    }
+    drawConfetti();
+</script>
+
+</body>
+</html>
